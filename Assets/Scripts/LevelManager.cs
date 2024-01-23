@@ -1,26 +1,23 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelLoader : MonoBehaviour
+public class LevelManager : MonoBehaviour
 {
-    public int nextLevelIndex; // Index of the next level to load
+    public int nextLevelIndex = 0; // Index of the next level to load    
 
-    private void OnTriggerEnter(Collider other)
+    public void LoadNextLevel()
     {
-        if (other.CompareTag("Player")) // Assuming the player has a "Player" tag
-        {
-            LoadNextLevel();
-        }
-    }
-
-    private void LoadNextLevel()
-    {
+        Debug.Log("Scene change initiated");
+        
         int sceneCount = SceneManager.sceneCountInBuildSettings;
 
         if (nextLevelIndex >= 0 && nextLevelIndex < sceneCount)
         {
             // Load the next level using its index
             SceneManager.LoadScene(nextLevelIndex);
+
+            nextLevelIndex += 1;
+
 
             // Register a callback for the scene being loaded
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -45,6 +42,7 @@ public class LevelLoader : MonoBehaviour
             {
                 player.transform.position = spawnPoint.position;
                 player.transform.rotation = spawnPoint.rotation;
+                Debug.Log("player moved to spawn position");
             }
             else
             {
