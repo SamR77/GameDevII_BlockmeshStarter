@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
+
+// Sam Robichaud 
+// NSCC Truro 2024
+
 
 public class EndLevelTrigger : MonoBehaviour
 {
@@ -12,11 +15,6 @@ public class EndLevelTrigger : MonoBehaviour
     {
         // Find the object in the scene that has a LevelManager component
         _levelManager = FindObjectOfType<LevelManager>();
-
-        
-        
-
-
     }
 
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Sam Robichaud 2022
+// Sam Robichaud 2024
 // NSCC-Truro
 // Based on tutorial by (Comp - 3 Interactive)  * with modifications *
 
@@ -20,14 +20,11 @@ public class FirstPersonController_Sam : MonoBehaviour
     [SerializeField] private bool canJump = true;
     [SerializeField] private bool canCrouch = true;    
     [SerializeField] private bool canSlideOnSlopes = true;
-    [SerializeField] private bool canZoom = true;
   
-
     [Header("Controls")]
     [SerializeField] private KeyCode runKey = KeyCode.LeftShift;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
-    [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
 
     [Header("Move Settings")]
     [SerializeField] private float walkSpeed = 4.0f;
@@ -56,13 +53,6 @@ public class FirstPersonController_Sam : MonoBehaviour
 
   
 
-    [Header("Zoom Settings")]
-    [SerializeField] private float timeToZoom = 0.2f;
-    [SerializeField] private float zoomFOV = 30f;
-    private float defaultFOV;
-    private Coroutine zoomRoutine;
-
- 
   
 
     // Sliding Settings
@@ -106,9 +96,6 @@ public class FirstPersonController_Sam : MonoBehaviour
     {
         playerCamera = GetComponentInChildren<Camera>();
         characterController = GetComponent<CharacterController>();
-        
-        defaultFOV = playerCamera.fieldOfView;        
-
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -178,32 +165,6 @@ public class FirstPersonController_Sam : MonoBehaviour
         }
     }
 
-    private void HandleZoom()
-    {
-        if (Input.GetKeyDown(zoomKey))
-        {
-            if (zoomRoutine != null)
-            {
-                StopCoroutine(zoomRoutine);
-                zoomRoutine = null;
-            }
-            zoomRoutine = StartCoroutine(ToggleZoom(true));
-        }
-
-        if (Input.GetKeyUp(zoomKey))
-        {
-            if (zoomRoutine != null)
-            {
-                StopCoroutine(zoomRoutine);
-                zoomRoutine = null;
-            }
-            zoomRoutine = StartCoroutine(ToggleZoom(false));
-        }
-    }
-
-
-
-    
 
     private void ApplyFinalMovement()
     {
@@ -255,21 +216,7 @@ public class FirstPersonController_Sam : MonoBehaviour
         duringCrouchAnimation = false;
     }
 
-    private IEnumerator ToggleZoom(bool isEnter)
-    {
-        float targetFOV = isEnter ? zoomFOV : defaultFOV;
-        float startingFOV = playerCamera.fieldOfView; // capture reference to current FOV
-        float timeElapsed = 0;
 
-        while (timeElapsed < timeToZoom)
-        {
-            playerCamera.fieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed / timeToZoom);
-            timeElapsed += Time.deltaTime;
-            yield return null;
-        }
-        playerCamera.fieldOfView = targetFOV;
-        zoomRoutine = null;
-    }
 
 
 

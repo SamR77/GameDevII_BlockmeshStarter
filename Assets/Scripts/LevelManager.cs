@@ -1,9 +1,22 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Sam Robichaud 
+// NSCC Truro 2024
+
 public class LevelManager : MonoBehaviour
 {
+    private GameManager _gameManager;
+
     public int nextLevelIndex = 0; // Index of the next level to load    
+
+
+    public void Awake()
+    {
+        // Find the object in the scene that has a GameManager component
+        _gameManager = FindObjectOfType<GameManager>();
+
+    }
 
     public void LoadNextLevel()
     {
@@ -13,11 +26,10 @@ public class LevelManager : MonoBehaviour
 
         if (nextLevelIndex >= 0 && nextLevelIndex < sceneCount)
         {
-            // Load the next level using its index
+            // Load the next level using it's index
             SceneManager.LoadScene(nextLevelIndex);
 
             nextLevelIndex += 1;
-
 
             // Register a callback for the scene being loaded
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -32,6 +44,9 @@ public class LevelManager : MonoBehaviour
     {
         // Unregister the callback to prevent multiple calls
         SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        //TODO: Move reset player to spawn into GameManager... *** Actually this whole method can be moved to the GameManager
+
 
         // Find the spawn point in the loaded scene and move the player
         GameObject player = GameObject.FindGameObjectWithTag("Player"); // Find the player
