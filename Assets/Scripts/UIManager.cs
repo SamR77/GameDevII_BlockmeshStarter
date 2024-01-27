@@ -7,15 +7,44 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Canvas canvasMainMenu;
+    public Canvas canvasGameplay;
+    public Canvas canvasPaused;
+    public Canvas canvasGameEnd;
+
+
+
+    public void UIMainMenu()
     {
-        
+        canvasMainMenu.enabled = true;
+        canvasGameplay.enabled = false;
+        canvasPaused.enabled = false;
+        canvasGameEnd.enabled = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UIGameplay()
     {
-        
+        canvasMainMenu.enabled = false;
+        canvasGameplay.enabled = true;
+        canvasPaused.enabled = false;
+        canvasGameEnd.enabled = false;
     }
+
+    public void UIPaused()
+    {
+        canvasMainMenu.enabled = false;
+        canvasGameplay.enabled = false;
+        canvasPaused.enabled = true;
+        canvasGameEnd.enabled = false;
+    }
+
+    public void UIGameEnd()
+    {
+        canvasMainMenu.enabled = false;
+        canvasGameplay.enabled = false;
+        canvasPaused.enabled = false;
+        canvasGameEnd.enabled = true;
+    }
+
+
 }
