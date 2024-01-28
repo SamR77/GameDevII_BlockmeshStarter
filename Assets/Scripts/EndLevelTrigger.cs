@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Sam Robichaud 
 // NSCC Truro 2024
-
 
 public class EndLevelTrigger : MonoBehaviour
 {
@@ -17,15 +17,13 @@ public class EndLevelTrigger : MonoBehaviour
         _levelManager = FindObjectOfType<LevelManager>();
     }
 
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player")) // Assuming the player has a "Player" tag
         {
             if (_levelManager != null)
-            {
-                // Call a method on the LevelManager
-                _levelManager.LoadNextLevel();
+            {                
+                _levelManager.LoadNextLevel();                
             }
             else
             {
@@ -34,5 +32,12 @@ public class EndLevelTrigger : MonoBehaviour
             
         }
     }
+
+
+    
+     
+
+
+
     
 }
