@@ -7,8 +7,7 @@ using UnityEngine.SceneManagement;
 // NSCC Truro 2024
 
 public class EndLevelTrigger : MonoBehaviour
-{
-      
+{      
     public LevelManager _levelManager;
 
     private void Awake()
@@ -19,25 +18,10 @@ public class EndLevelTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) // Assuming the player has a "Player" tag
+        if (other.gameObject.CompareTag("Player"))
         {
-            if (_levelManager != null)
-            {                
-                _levelManager.LoadNextLevel();                
-            }
-            else
-            {
-                Debug.LogError("LevelManager not found in the scene");
-            }
-            
-        }
+            _levelManager.LoadNextLevel();
+        }     
     }
-
-
-    
-     
-
-
-
     
 }
