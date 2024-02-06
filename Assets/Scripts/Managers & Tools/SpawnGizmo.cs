@@ -1,54 +1,62 @@
 using UnityEngine;
-using System.Collections;
-
-// Sam Robichaud 
-// NSCC Truro 2024
 
 public class SpawnGizmo : MonoBehaviour
 {
     void OnDrawGizmos()
     {
-        //TODO: Update Gizmo to maybe use Solid block to make it easier to tell where the players feet will land, perhaps have the color of the arrown differnt so it stands out more...
-
-        // Set the color of the Gizmo line
-        Gizmos.color = Color.red;
-
-        Gizmos.DrawWireSphere(transform.position, 1.0f);
-
-        // Get the current position of the object
-        Vector3 startPosition = transform.position;
-
-        // Calculate the end point 1 meter forward
-        Vector3 endPosition = startPosition + transform.forward * 1.5f;
-
-        // Draw the line
-        Gizmos.DrawLine(startPosition, endPosition);
-
-        // Draw the arrowhead
-        DrawArrowEnd(startPosition, endPosition);
-
-        void DrawArrowEnd(Vector3 start, Vector3 end)
+        // only allows rotation of the Y axis
+        if (transform.eulerAngles.x != 0 || transform.eulerAngles.z != 0)
         {
-            // Set the size of the arrowhead
-            float arrowHeadLength = 0.25f;
-            float arrowHeadAngle = 45.0f;
-
-            // Calculate the direction from the start to the end
-            Vector3 direction = (end - start).normalized;
-
-            // Calculate the up, down, right and left lines of the arrowhead
-            Vector3 up = Quaternion.LookRotation(direction) * Quaternion.Euler(180 + arrowHeadAngle, 0, 0) * new Vector3(0, 0, 1);
-            Vector3 down = Quaternion.LookRotation(direction) * Quaternion.Euler(180 - arrowHeadAngle, 0, 0) * new Vector3(0, 0, 1);
-            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-
-            // Draw the up, down right and left sides of the arrowhead
-            Gizmos.DrawLine(end, end + right * arrowHeadLength);
-            Gizmos.DrawLine(end, end + left * arrowHeadLength);
-            Gizmos.DrawLine(end, end + up * arrowHeadLength);
-            Gizmos.DrawLine(end, end + down * arrowHeadLength);
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         }
 
-    }
-}
+        Gizmos.matrix = this.transform.localToWorldMatrix;
 
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(Vector3.zero, new Vector3(0.6f, 2.0f, 0.4f));
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawCube(Vector3.zero + new Vector3(0.0f, 0.0f, 0.55f), new Vector3(0.075f, 0.075f, 0.7f));
+        Gizmos.DrawSphere(Vector3.zero + new Vector3(0.0f, 0.0f, 1.0f), 0.06f);
+
+        Vector3 startPosition = transform.position;
+        Vector3 endPosition = startPosition + transform.forward * 1.0f;
+
+        DrawArrowEnd(startPosition, endPosition);
+    }
+
+    private void DrawArrowEnd(Vector3 start, Vector3 end)
+    {
+        float arrowHeadLength = 0.2f;
+        float arrowHeadWidth = 0.05f;
+        float arrowHeadThickness = 0.05f;
+
+        Vector3 direction = (end - start).normalized;
+        Quaternion rotation = Quaternion.LookRotation(direction);
+
+        // Calculates positions for the rectangular shapes of the arrowhead
+        Vector3 right = rotation * Quaternion.Euler(0, 180 + 45, 0) * new Vector3(0, 0, arrowHeadLength);
+        Vector3 left = rotation * Quaternion.Euler(0, 180 - 45, 0) * new Vector3(0, 0, arrowHeadLength);
+        Vector3 up = rotation * Quaternion.Euler(180 + 45, 0, 0) * new Vector3(0, 0, arrowHeadLength);
+        Vector3 down = rotation * Quaternion.Euler(180 - 45, 0, 0) * new Vector3(0, 0, arrowHeadLength);
+
+        // Draws each side of the arrowhead
+        DrawArrowRectangle(end, right, arrowHeadWidth, arrowHeadThickness);
+        DrawArrowRectangle(end, left, arrowHeadWidth, arrowHeadThickness);
+        DrawArrowRectangle(end, up, arrowHeadWidth, arrowHeadThickness);
+        DrawArrowRectangle(end, down, arrowHeadWidth, arrowHeadThickness);
+    }
+
+    private void DrawArrowRectangle(Vector3 end, Vector3 direction, float width, float thickness)
+    {
+        Vector3 position = end + direction * 1.1f;
+        Gizmos.matrix = Matrix4x4.TRS(position, Quaternion.LookRotation(direction), new Vector3(thickness, width, direction.magnitude));
+        Gizmos.DrawCube(Vector3.zero, Vector3.one);
+    }
+
+
+
+
+
+
+}

@@ -37,10 +37,8 @@ public class GameManager : MonoBehaviour
         _uIManager = FindObjectOfType<UIManager>();
 
         // Find the object in the scene that has a CharacterController component
-        _characterController = FindObjectOfType<CharacterController>();
-        
+        _characterController = FindObjectOfType<CharacterController>();        
         _fpsControllerScript = FindObjectOfType<FirstPersonController_Sam>();
-
     }
 
     void Update()
@@ -51,9 +49,8 @@ public class GameManager : MonoBehaviour
             case GameState.Gameplay:    Gameplay(); break;
             case GameState.Paused:      Paused();   break;
             case GameState.GameEnd:     GameEnd();  break;
-        }
+        }        
     }
-
 
     # region Gamestate Logic
 
@@ -81,7 +78,6 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         _fpsControllerScript.enabled = false;
-
 
         _uIManager.UIPaused();        
 
@@ -127,5 +123,10 @@ public class GameManager : MonoBehaviour
         _characterController.enabled = true;        
     }
 
+   
+
 
 }
+
+
+

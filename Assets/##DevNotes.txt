@@ -2,10 +2,15 @@ Sam Robichaud
 NSCC 2024
 
 TODO:
+- add credits screen.
+- add credits for fonts used.
+- add subscreens for QUIT and Return to Menu... "Are you sure you want to return to title screen?   [Yes]   [No]".
+- Set camera facing(orientation) on move player to spawn (not sure if this is possible with mouse controls? will the mouse position ovverride the camera facing?) TBD.
+- add a Killzone below level to reset player to spawn when falling below level.
+- add logic to make CanvasGameplay not hardcoded, have a place in the GameManager to enter values and have the info in the CanvasGameplay for those scenes autopopulate.
 
-- Add keyboard shortcuts to allows playtesting of levels quickly
-- Seperate GameManager from title screen, Spawn in on game Title Screen load *(issue with returning to title screen, Game manager is duplicate and gives warnings... maybe destroying Game Manager when loading title screen is an easier way to address this.)
-- add credits for fonts used
-- add credits screen
-- add subscreens for QUIT and Return to Menu... "Are you sure you want to return to title screen?   [Yes]   [No]"
+DONE: 
+- Feb 06 2024 - Added playtest method in LevelManager to allow for keyboard shortcuts to change levels using "{" & "}"
+- Feb 06 2024 - Updated Spawn position Gizmo to have a more clear visual represenation of orientation
+- Feb 06 2024 - Created Prefabs for EndLevelTrigger, SpawnPoint & CanvasGameplay
 

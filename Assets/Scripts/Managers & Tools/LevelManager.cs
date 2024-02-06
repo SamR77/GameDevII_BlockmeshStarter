@@ -9,10 +9,10 @@ public class LevelManager : MonoBehaviour
     private GameManager _gameManager;
     private CharacterController _characterController;
 
-    public int nextLevelIndex = 0; // Index of the next level to load    
-    public int currentLevelIndex = 0;
+    public int sceneToLoad = 0; // Index of the next level to load 
+    //public int previousLevelIndex = 0; // Index of the next level to load   
+    public int currentSceneIndex = 0;
     public int displaySceneCount = 0;
-
 
     public void Awake()
     {
@@ -22,46 +22,55 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
-        currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         displaySceneCount = SceneManager.sceneCountInBuildSettings;
+        SceneLoadDebug();
     }
 
-
-
-    public void LoadNextLevel()
+    public void LoadFirstLevel()
     {
-        // Subscribe to the sceneLoaded event ( OnSceneLoaded() initiates once the scene is completed loading )
-        
+        LoadLevel(+1);
+    }
+
+    public void LoadLevel(int increment)
+    {
+        // Starts listening for OnSceneLoaded event
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
         // References the total scene count
         int sceneCount = SceneManager.sceneCountInBuildSettings;
 
-        nextLevelIndex += 1;
+        sceneToLoad = currentSceneIndex += increment;
 
-        if (nextLevelIndex >= 0 && nextLevelIndex < sceneCount-1)
+        if (sceneToLoad >= sceneCount - 1)                          { sceneToLoad = sceneCount - 1; Debug.LogError("Last scene in build order");   }
+        else if (sceneToLoad <= 0)                                  { sceneToLoad = 0;              Debug.LogError("First scene in build order");   }        
+        else if (sceneToLoad < 0 || sceneToLoad > sceneCount - 1)   { Debug.LogError("Invalid level index. Ensure the nextLevelIndex is within the range of available scenes."); }
+
+        SceneManager.LoadScene(sceneToLoad);
+
+        // if scene to load is "MainMenu" scene(The first of scene of build order)
+        if (currentSceneIndex == 0)
         {
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            // Load the next level using it's index
-            SceneManager.LoadScene(nextLevelIndex);            
+            _gameManager.gameState = GameManager.GameState.MainMenu;           
         }
-        else if (nextLevelIndex == sceneCount-1)
+
+        // if scene to load is a "Gameplay" scene (Not the first or last scene of build order)
+        else if (currentSceneIndex > 0 && currentSceneIndex < sceneCount - 1)
         {
-            SceneManager.LoadScene(nextLevelIndex);
+            _gameManager.gameState = GameManager.GameState.Gameplay;            
+        }
+
+        // if scene to load is a "GameEnd" scene (The last scene of build order)
+        else if (currentSceneIndex == sceneCount - 1)
+        {
             _gameManager.gameState = GameManager.GameState.GameEnd;
-        }
-
-        
-        else
-        {
-            Debug.LogError("Invalid level index. Ensure the nextLevelIndex is within the range of available scenes.");
         }
     }
 
-    
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        _gameManager.gameState = GameManager.GameState.Gameplay;
-        Debug.Log(_gameManager.gameState);
+        // References the total scene count
+        int sceneCount = SceneManager.sceneCountInBuildSettings;            
 
         _gameManager.MovePlayerToSpawnPosition();
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -70,13 +79,27 @@ public class LevelManager : MonoBehaviour
     public void LoadTitleScreen()
     {        
         SceneManager.LoadScene(0);
-        nextLevelIndex = 0;
+        sceneToLoad = 0;
         _gameManager.gameState = GameManager.GameState.MainMenu;
-
     }
-    
 
+    void SceneLoadDebug()
+    {
+        if (Input.GetKey(KeyCode.RightBracket))
+        {
+            Debug.Log("load next level");
+            LoadLevel(+1);
+        }
 
-
+        if(Input.GetKey(KeyCode.LeftBracket))
+        {
+            Debug.Log("load previous level");
+            LoadLevel(-1);
+        }
+    }
 
 }
+
+
+
+
