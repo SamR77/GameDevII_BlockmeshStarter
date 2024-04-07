@@ -10,6 +10,10 @@ TODO:
 - add logic to make CanvasGameplay not hardcoded, have a place in the GameManager to enter values and have the info in the CanvasGameplay for those scenes autopopulate.
 
 DONE: 
+- Apr 07 2024 -	Fixed bug with character controller getting stuck transitioning between meshes because "skin width" was set too low
+- Apr 07 2024 -	Revised Project folder organization
+- Apr 07 2024 -	Added Probuilder to project default
+- Apr 07 2024 - Fixed Bug with Scene count being out of range on last scene loaded
 - Feb 06 2024 - Added playtest method in LevelManager to allow for keyboard shortcuts to change levels using "{" & "}"
 - Feb 06 2024 - Updated Spawn position Gizmo to have a more clear visual represenation of orientation
 - Feb 06 2024 - Created Prefabs for EndLevelTrigger, SpawnPoint & CanvasGameplay
